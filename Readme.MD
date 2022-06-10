@@ -47,4 +47,8 @@ Read only templates with instructions for creating docker container. Define the 
 
 Outlines instructions for how an image will create a container.
 ## Image to container relationship
-![](images/filename%20image%20to%20container.png)
+![](images\image%20to%20container.png)
+## Dockerhub
+Collects images from Docker users and hosts them as online repositories. 
+
+## Run an Ubuntu container and a container Shell
