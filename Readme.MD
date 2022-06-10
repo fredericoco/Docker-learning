@@ -47,8 +47,35 @@ Read only templates with instructions for creating docker container. Define the 
 
 Outlines instructions for how an image will create a container.
 ## Image to container relationship
-![image](images\image%20to%20container.png)
+![](images\image%20to%20container.png)
 ## Dockerhub
 Collects images from Docker users and hosts them as online repositories. 
 
-## Run an Ubuntu container and a container Shell
+## Run an Ubuntu container and a container Shell 10
+
+`docker --version` # to check if working
+`docker search ubuntu` # searchs through images called ubuntu
+`docker create --help`
+`docker create --name=foo -it ubuntu bash` #creates a docker container from an ubuntu image, giving it a name foo, -i makes it interactive,the bash gives it a terminal.and the t makes it look like a terminal session. This explains it better https://stackoverflow.com/questions/30137135/confused-about-docker-t-option-to-allocate-a-pseudo-tty
+`docker container ls -a`
+`docker start foo`
+`docker attach` foo #ssh into the container
+`ls` #shows that you are no longer on your old machine
+`ctrl p+q` # triggers the read escape command this might cause issues on vscode but worked for me on gitbash
+`docker logs foo` # shows all of the commands run 
+`docker attach` foo
+`apt-get update` # makes sure that our packages are up to date
+`apt-get install iputils-ping` #installs ping package
+`ping google.com` # run the ping command to google.com
+Read escape sequence
+`docker logs foo` Shows the logs from what has just happened will show the ping command.
+
+## Run an Ubuntu container and a container Shell continued 11
+`docker container --help`
+`docker rm foo -f` # forced stop of the container foo
+or `docker stop foo` and `docker rm foo` safe way of stopping the container
+`docker container ls -a` # will show stopped foo container or nothing depending if you have used -f
+`docker run --help` # Docker run can be used to combine the create and start
+`docker run --name=bar -it ubuntu bash` # creates ubuntu container and starts bash
+`docker image --help`
+`docker image ls` Used to see the images pulled to the machine
