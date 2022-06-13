@@ -54,6 +54,7 @@ Collects images from Docker users and hosts them as online repositories.
 ## Run an Ubuntu container and a container Shell 10
 
 `docker --version` # to check if working
+Note if you have installed docker correctly and the version command doesn't work you might have to use an allias for windows `alias docker="winpty docker"`
 `docker search ubuntu` # searchs through images called ubuntu
 `docker create --help`
 `docker create --name=foo -it ubuntu bash` #creates a docker container from an ubuntu image, giving it a name foo, -i makes it interactive,the bash gives it a terminal.and the t makes it look like a terminal session. This explains it better https://stackoverflow.com/questions/30137135/confused-about-docker-t-option-to-allocate-a-pseudo-tty
@@ -79,3 +80,36 @@ or `docker stop foo` and `docker rm foo` safe way of stopping the container
 `docker run --name=bar -it ubuntu bash` # creates ubuntu container and starts bash
 `docker image --help`
 `docker image ls` Used to see the images pulled to the machine
+
+## Docker images and the dockerfile 12
+A read only template with instructions for creating a docker container.
+A Dockerfile is a text document with various commands that assemble to biuld a container. A docker create image from FROM. Docker create image command CMD. COPY,RUN and more...
+
+## Build a file server image 13
+Do this in a docker directory
+`mkdir serve`
+`mkdir display`
+`cat > display/foo.txt` Put some text in here to make sure it works.This allows you to create a txt file in the display directory without having to go there. I prefer to use nano.
+`mkdir display/site`
+`cat > display/site/index.html` Same as earlier but html
+`touch Dockerfile` Creates a dockerfile without having to put anything in it.
+
+The dockerfile can be editted in vscode.
+```
+FROM node:latest
+RUN npm install -g serve
+COPY ./display ./display
+CMD serve ./display
+```
+The `FROM` command imports the latest version of an image. In this case it's node.js. You can search different version by putting `docker search node` in as a command.
+
+The `RUN` command uses the inbuilt npm to install serve as a global variable in the container.
+
+The `COPY` command copies the local `display` directory to the container directory, at the `./display` location.
+
+The `CMD` is a command, it will call to run serve on the `./display` directory.
+
+`docker build --help`
+`docker build . -t frerf/serve` Builds the image. THis might take some time since the image is big
+`docker image ls` shows that it has been created (it's large)
+`docker run --name=serve -p=3001:5000 frerf/serve` creates a container using the image we created, and redirects port 5000 to 3001.
