@@ -112,4 +112,55 @@ The `CMD` is a command, it will call to run serve on the `./display` directory.
 `docker build --help`
 `docker build . -t frerf/serve` Builds the image. THis might take some time since the image is big
 `docker image ls` shows that it has been created (it's large)
-`docker run --name=serve -p=3001:5000 frerf/serve` creates a container using the image we created, and redirects port 5000 to 3001.
+`docker run --name=serve -p=3001:3000 frerf/serve` creates a container using the image we created, and redirects port 3000 to 3001.
+## Build an express.js image
+
+`mkdir express`
+`touch Dockerfile`
+`touch server.js`
+`touch package.json`
+
+include the js,json and dockerfile here.
+
+server.js
+```
+const express = require('express');
+const app = express();
+const HOST = "0.0.0.0"
+const PORT = 80;
+
+app.get('/', (req,res) => {
+    res.send('Hello world')
+});
+
+app.listen(PORT,HOST);
+console.log('Running on http://${HOST}:${PORT}');
+```
+package.js
+```
+{
+    "dependencies": {
+        "express":"^4.16.1"
+    }
+}
+```
+Dockerfile
+```
+FROM node
+WORKDIR /home/node
+COPY . .
+RUN npm install 
+CMD ["node","server.js"]
+```
+
+
+`docker build . -t fred/express`
+`docker run --name=express  -dp=3002:80 fred/express` uses detached mode 
+
+## Layered image cache and .dockerignore 16
+
+Optimising the build process.
+
+By including a .dockerignore file, it will make the copying portion more effective so the image will become smaller.
+
+Caching will also make the process more effective. In our example if we copy over `package.json` it will be cached and make it more efficient. the `npm install` line will only run if there is something new introduced to the app.
