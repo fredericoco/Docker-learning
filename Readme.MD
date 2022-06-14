@@ -164,3 +164,17 @@ Optimising the build process.
 By including a .dockerignore file, it will make the copying portion more effective so the image will become smaller.
 
 Caching will also make the process more effective. In our example if we copy over `package.json` it will be cached and make it more efficient. the `npm install` line will only run if there is something new introduced to the app.
+
+## Build a PHP image 17
+
+Building a docker image but with PHP.
+
+Include the dockerfile and the php file.
+
+## Build a Python Flask image 
+
+Building a docker image from a flask app.
+
+Create a python file for the app, a txt for for the requirements and a dockerfile. Note this is something I need to come back to and look at, there's an issue here.
+
+## Docker container storage - Mounts 20
