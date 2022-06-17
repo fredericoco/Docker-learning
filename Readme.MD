@@ -171,10 +171,100 @@ Building a docker image but with PHP.
 
 Include the dockerfile and the php file.
 
-## Build a Python Flask image 
+## Build a Python Flask image 18
 
 Building a docker image from a flask app.
 
 Create a python file for the app, a txt for for the requirements and a dockerfile. Note this is something I need to come back to and look at, there's an issue here.
 
 ## Docker container storage - Mounts 20
+Volume mounts - store data in a Docker-managed directory of the host file system.
+
+Bind mounts - directly links directories on the docker host to the container.
+
+Tmpfs mounts -write to the memory of the docker host 
+
+![](images\container%20storage.png)
+
+Use cases
+
+Volume mounts - store data across multiple containers in a guaranteed space.
+
+Bind mounts - allow for editing by the Docker host and Docker containers.
+
+tmpfs mounts - work with data that should disappear as soon as possible.
+
+## Volume mounts 21
+
+`docker volume --help`
+`docker volume create shared-vol`
+`docker volume ls`
+`docker inspect shared-vol`
+
+Volume mount point is in a virtual machine.
+`docker run -it --name=foo --mount source=shared-vol,target = /src/shared ubuntu bash`
+## Bind Mounts 22
+`mkdir bindmountdir`
+`nano goo.txt`
+`docker run -it --name=foo --mount type=bind,source="pwd/bindmoutdir",target=/src/mountdir ubuntu bash` note the source command doesn't have to be in quotes if there are zero spaces.
+
+You will now find the goo file in the src/mountdir directory on the ubuntu machine.
+
+This can also be done in revers, creating a txt file in the directory on the ubuntu machine and then finding it on the computer dir.
+
+## Tmpfs mounts 23
+Used for secret data or keys
+
+## Docker container networking 25
+The system fore how containers share resources and send messages to each other.
+
+Default docker networks, bridge-default docker network. none containers without an IP. Host -shares the network with the host machine.
+
+User defined private networks. Set up connections between a handful of docker containers. Embedded a DNS server. Need network drivers, most commonly:bridge
+
+## Create a Docker container network 26
+
+`docker network --help`
+`docker network ls`
+`docker run -itd --name=foo busybox`
+`docker run -itd --name=bar busybox`
+`docker network inspect bridge`
+Take note of the ipv4
+`docker attach foo`
+`ping bar-ipv4-address`
+
+private network
+`docker network create privatenw`
+`docker network ls`
+`docker run --network=privatenw -itd --name=baz busybox`
+`docker inspect privatenw`
+Make a note of the IP
+`docker run --network=privatenw -itd --name=goo busybox`
+Make a note of the IP
+`docker attach baz`
+`ping Ipv4-address of goo`
+You can't ping foo or bar because it couldn't connect to a container outside of it's own network.
+You can also ping the name goo, because it acts like a phonebook.
+`docker container ls -q | xargs docker rm -f`
+
+## Docker Compose 27
+What is docker compose? A tool for composing and building applications with more than one docker container. Containers in compose are services. Define services with docker-compose.yml.
+
+Why is Docker compose useful? Start multiple containers with one command. Docker-coompose.yml is also great documentation.
+
+Nice features of Docker compose. Private network for the compose application. Caches the services. Multi-container isolated environments.
+
+docker-compose.yml. There are different versions of docker compose (video I'm watching says 3 is most recent so take that with a grain of salt). Format: key-value structure. Similar to xml or json. Compose options,services,build,image and more.
+
+## Compose a two container App 28 and 29
+
+Backend and frontend. For sports attributes.
+Make a node-php directory. This should contain a docker-compose file and a players directory(containing a dockerfile,json file and js file).
+
+`docker compose --help`
+`docker compose up`
+
+Explain the files later.
+
+Make a new folder containing a php file and a dockerfile.
+`docker compose up` should run both containers
